@@ -20,4 +20,8 @@ class Mercado
 	public function getPrices() {
 		return $this->prices;
 	}
+
+	public function getName() {
+		return $this->name;
+	}
 }

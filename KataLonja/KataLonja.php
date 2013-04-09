@@ -8,17 +8,27 @@ class KataLonja
 		'Centollos' => 50
 		);
 
-	public function calculateLoss(Mercado $mercado){
+	protected $prices = array();
+	protected $distances = array();
+
+	public function whereIShouldSell(){
+
+	}
+
+	public function calculateLoss($mercado){
 
 		$loss = 0;
 
-		$prices = $mercado->getPrices();
+		$prices = $this->prices[$mercado];
 
 		$totalPriceSold = $this->calculatePriceProduct($prices);
 
-		$distance = $mercado->getDistance();
+		$distance = $this->distances[$mercado];
 
-		$loss = $totalPriceSold - $distance * 2 - 5;
+		$deprecated = $this->calculateDeprecated($totalPriceSold, $distance);
+
+		$loss = $totalPriceSold - $distance * 2 - 5 - $deprecated;
+		var_dump($totalPriceSold/0.01);
 
 		return $loss;
 	}
@@ -32,5 +42,17 @@ class KataLonja
 		}
 
 		return $total;
+	}
+
+	public function calculateDeprecated($totalPriceSold, $distance){
+		$deprecated = floor($distance/100) * ($totalPriceSold * 0.01);
+
+		return $deprecated;
+	}
+
+	public function addCity(Mercado $mercado){
+		$this->distances[$mercado->getName()] = $mercado->getDistance();
+		$this->prices[$mercado->getName()] = $mercado->getPrices();
+		return $this;
 	}
 }
