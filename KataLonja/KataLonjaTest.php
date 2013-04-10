@@ -30,9 +30,9 @@ class KataLonjaTest extends PHPUNIT_framework_TestCase
 
 	public function mercadosProvider(){
 		$cases = array(
-				array('expected' => 45895, 'mercado' => 'MADRID'),
-				array('expected' => 32295, 'mercado' => 'BARCELONA'),
-				array('expected' => 63795, 'mercado' => 'LISBOA')
+				array('expected' => 36695, 'mercado' => 'MADRID'),
+				array('expected' => 22505, 'mercado' => 'BARCELONA'),
+				array('expected' => 54795, 'mercado' => 'LISBOA')
 			);
 
 		return $cases;
@@ -42,6 +42,10 @@ class KataLonjaTest extends PHPUNIT_framework_TestCase
 	 * @dataProvider mercadosProvider
 	 */
 	public function testMercado($expected, $mercado){
-		$this->assertEquals($expected, $this->lonja->calculateLoss($mercado));
+		$this->assertEquals($expected, $this->lonja->calculateProfit($mercado));
+	}
+
+	public function testBestMercado(){
+		$this->assertEquals("The best mercado is: LISBOA", $this->lonja->whereIShouldSell());
 	}
 }

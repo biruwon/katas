@@ -10,14 +10,28 @@ class KataLonja
 
 	protected $prices = array();
 	protected $distances = array();
+	protected $cities = array();
 
 	public function whereIShouldSell(){
 
+		$maxProfit = 0;
+		$cityName = "";
+
+		foreach ($this->cities as $city){
+
+			$cityProfit = $this->calculateProfit($city);
+			if ($maxProfit < $cityProfit){
+				$maxProfit = $cityProfit;
+				$cityName = $city;
+			}
+		}
+
+		return "The best mercado is: " . $cityName;
 	}
 
-	public function calculateLoss($mercado){
+	public function calculateProfit($mercado){
 
-		$loss = 0;
+		$profit = 0;
 
 		$prices = $this->prices[$mercado];
 
@@ -27,10 +41,9 @@ class KataLonja
 
 		$deprecated = $this->calculateDeprecated($totalPriceSold, $distance);
 
-		$loss = $totalPriceSold - $distance * 2 - 5 - $deprecated;
-		var_dump($totalPriceSold/0.01);
+		$profit = $totalPriceSold - $distance * 2 * 2 - 5 - $deprecated;
 
-		return $loss;
+		return $profit;
 	}
 
 	public function calculatePriceProduct($prices){
@@ -45,7 +58,7 @@ class KataLonja
 	}
 
 	public function calculateDeprecated($totalPriceSold, $distance){
-		$deprecated = floor($distance/100) * ($totalPriceSold * 0.01);
+		$deprecated = floor(($distance * 2)/100) * ($totalPriceSold * 0.01);
 
 		return $deprecated;
 	}
@@ -53,6 +66,7 @@ class KataLonja
 	public function addCity(Mercado $mercado){
 		$this->distances[$mercado->getName()] = $mercado->getDistance();
 		$this->prices[$mercado->getName()] = $mercado->getPrices();
+		$this->cities[] = $mercado->getName();
 		return $this;
 	}
 }
